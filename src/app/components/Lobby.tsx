@@ -1,3 +1,4 @@
+// components/Lobby.tsx
 "use client";
 
 import { useState } from "react";
@@ -21,15 +22,15 @@ export default function Lobby() {
   // TODO: setPlayers from websocket
 
   return (
-    <div className="w-full bg-gray-800 rounded-lg shadow-lg">
+    <div className="w-full bg-gray-800 rounded-lg shadow-lg mt-6">
       <div className="text-2xl font-bold text-center font-bold pt-4">
         Round {roundNumber}/{totalRounds}
       </div>
-      <div className="flex flex-col mt-4 ">
+      <div className="flex flex-col mt-2 ">
         {players.map((player) => (
           <div
             key={player.id}
-            className={`flex items-center space-x-3 p-2 m-1 ${
+            className={`flex items-center space-x-3 p-2 m-3 rounded-lg ${
               player.isActive ? "bg-green-400" : "bg-gray-600"
             }`}
           >
@@ -38,7 +39,7 @@ export default function Lobby() {
               <div>{player.points}</div>
             </div>
             {player.isActive && (
-              <div className="text-green-500 font-bold">Your Turn!</div>
+              <div className="text-red-500 font-bold">🎲</div>
             )}
           </div>
         ))}
