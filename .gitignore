@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# custom
+zzz.md
+
 # dependencies
 /node_modules
 /.pnp
