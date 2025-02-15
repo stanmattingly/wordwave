@@ -1,16 +1,19 @@
 "use client";
 
 export default function PowerUps() {
-  // TODO: connect to player state for setting amount of gems.
+  // TODO: connect to player state for setting amount of gems, isWinning.
   const playerGems = 9;
   const totalGems = 10;
+  const isWinning = false;
 
   return (
-    <div className="w-full bg-gray-800 rounded-lg shadow-lg mt-6 p-4 flex flow-row">
-      <div className="basis-1/6 lm-2 text-3xl">💀</div>
+    <div className="w-full bg-gray-800 rounded-lg shadow-lg mt-6 pt-3 flex flow-row">
+      <div className="basis-1/6 lm-2 text-3xl p-5">
+        {isWinning ? "👑" : "💀"}
+      </div>
       <div className="basis-2/6 lm-2 p-2 grid grid-cols-5 gap-1">
         {Array.from({ length: totalGems }, (_, index) => (
-          <span key={index} className="w-full h-10 object-cover rounded">
+          <span key={index} className="w-full h-8 object-cover rounded">
             {index < playerGems ? "💎" : " "}
           </span>
         ))}

@@ -26,3 +26,12 @@ export const letterPoints: { [key: string]: number } = {
   Y: 4,
   Z: 10,
 };
+
+export const Logo = () => {
+  return (
+    <div className="logo-container">
+      <h2 className="text-3xl font-bold text-center logo-front">WordWave</h2>
+      <h2 className="text-3xl font-bold text-center logo-back">WordWave</h2>
+    </div>
+  );
+};

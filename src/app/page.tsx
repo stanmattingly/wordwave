@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PowerUps from "./components/PowerUps";
 import GameBoard from "./components/Gameboard";
 import Lobby from "./components/Lobby";
+import { Logo } from "./components/utils";
 import { useGameWebSocket } from "./hooks/useGameWebSocket";
 
 type GameMessage = {
@@ -170,10 +171,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4">
-      <div className="logo-container">
-        <h2 className="text-3xl font-bold text-center logo-front">WordWave</h2>
-        <h2 className="text-3xl font-bold text-center logo-back">WordWave</h2>
-      </div>
+      <Logo />
 
       {isHost && (
         <div className="text-center">

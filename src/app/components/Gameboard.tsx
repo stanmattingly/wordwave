@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, CSSProperties } from "react";
 import { letterPoints } from "../components/utils";
+import CanvasOverlay from "../components/CanvasOverlay"; // Adjust the path as necessary
+
 import { useGameWebSocket } from "../hooks/useGameWebSocket";
 
 interface GameBoardProps {
@@ -21,63 +23,15 @@ export default function GameBoard({ boardState }: GameBoardProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const drawLine = (
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number
-  ) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    if (ctx) {
-      ctx.beginPath();
-      ctx.moveTo(startX, startY);
-      ctx.lineTo(endX, endY);
-      ctx.strokeStyle = "#FFFFFF"; // Line color
-      ctx.lineWidth = 8;
-      ctx.stroke();
-    }
-  };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (canvas) {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 1; i < selectedLetters.length; i++) {
-          const start = selectedLetters[i - 1];
-          const end = selectedLetters[i];
-          const startPos = getLetterPosition(start.pos);
-          const endPos = getLetterPosition(end.pos);
-          drawLine(startPos.x, startPos.y, endPos.x, endPos.y);
-        }
-      }
-    }
-  }, [selectedLetters]);
-
   const getLetterPosition = (index: number) => {
     const row = Math.floor(index / 5);
     const col = index % 5;
-    const tileSize = 60; // Adjust this value based on your tile size
-    const buttonSize = 54; // Assume button size is the same as tile size
+    const tileSize = 60;
     const offset = 16; // Button padding + border, adjust as needed
     return {
-      x: col * tileSize + tileSize / 2 + offset, // Centering the line on the button
-      y: row * tileSize + tileSize / 2 + offset, // Centering the line on the button
+      x: col * tileSize + tileSize / 2 + offset, // Centering
+      y: row * tileSize + tileSize / 2 + offset, // Centering
     };
-  };
-
-  // Include an additional style to position the canvas correctly
-  const canvasStyle = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    zIndex: 0, // Make sure the canvas is below the buttons but above other elements
-    width: "100%", // Ensure the canvas covers the entire grid area
-    height: "100%", // Ensure the canvas covers the entire grid area
   };
 
   useEffect(() => {
@@ -171,7 +125,10 @@ export default function GameBoard({ boardState }: GameBoardProps) {
           : " "}
       </header>
       <div className="relative">
-        <canvas ref={canvasRef} style={canvasStyle} />
+        <CanvasOverlay
+          selectedLetters={selectedLetters}
+          getLetterPosition={getLetterPosition}
+        />
 
         {boardState.length > 0 ? (
           <div className="grid grid-cols-5 gap-1 bg-gray-700 p-4 rounded-lg">
