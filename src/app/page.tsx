@@ -7,14 +7,14 @@ import { useGameWebSocket } from "./hooks/useGameWebSocket";
 
 type GameMessage = {
   type:
-  | "room_joined"
-  | "room_updated"
-  | "gameboard_update"
-  | "turn_update"
-  | "round_update"
-  | "player_score_update"
-  | "connected"
-  | "error";
+    | "room_joined"
+    | "room_updated"
+    | "gameboard_update"
+    | "turn_update"
+    | "round_update"
+    | "player_score_update"
+    | "connected"
+    | "error";
   content?: {
     board?: string[][];
     turnIndex?: number;
@@ -46,7 +46,9 @@ export default function Home() {
   const generateRandomBoard = () => {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     let shuffled = [...alphabet].sort(() => Math.random() - 0.5);
-    return Array.from({ length: 5 }, (_, i) => shuffled.slice(i * 5, i * 5 + 5));
+    return Array.from({ length: 5 }, (_, i) =>
+      shuffled.slice(i * 5, i * 5 + 5)
+    );
   };
 
   // 🔹 Update game state when room updates
@@ -105,7 +107,10 @@ export default function Home() {
           break;
 
         case "player_score_update":
-          if (msg.content.playerId !== undefined && msg.content.points !== undefined) {
+          if (
+            msg.content.playerId !== undefined &&
+            msg.content.points !== undefined
+          ) {
             setPlayers((prevPlayers) =>
               prevPlayers.map((p) =>
                 p.id === msg.content!.playerId
@@ -121,7 +126,6 @@ export default function Home() {
       }
     });
   }, [messages]);
-
 
   // 🔹 Ensure board is generated when the game starts
   const startGame = () => {
@@ -165,7 +169,10 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-3xl font-bold text-center my-6">Word Wave!</h1>
+      <div className="logo-container">
+        <h2 className="text-3xl font-bold text-center logo-front">WordWave</h2>
+        <h2 className="text-3xl font-bold text-center logo-back">WordWave</h2>
+      </div>
 
       {isHost && (
         <div className="text-center">
@@ -193,17 +200,14 @@ export default function Home() {
         </div>
       )}
 
-      <div className="grid grid-cols-12 gap-2 mt-4">
-        {/* Left spacer */}
-        <div className="col-span-1"></div>
-
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mt-4">
         {/* GameBoard with board state */}
-        <div className="col-span-8">
+        <div className="md:col-span-8 col-span-1">
           <GameBoard boardState={boardState} />
         </div>
 
         {/* Lobby with player list and round number */}
-        <div className="col-span-3">
+        <div className="md:col-span-3 col-span-1">
           <Lobby roundNumber={roundNumber} players={players} />
         </div>
       </div>

@@ -17,7 +17,7 @@ const totalRounds = 5;
 const Lobby: React.FC<LobbyProps> = ({ roundNumber, players = [] }) => {
   return (
     <div className="w-full bg-gray-800 rounded-lg shadow-lg mt-6 p-4">
-      <div className="text-2xl font-bold text-center">
+      <div className="text-xl font-bold text-center">
         Round {roundNumber}/{totalRounds}
       </div>
       <div className="flex flex-col mt-2">
@@ -27,14 +27,17 @@ const Lobby: React.FC<LobbyProps> = ({ roundNumber, players = [] }) => {
           players.map((player) => (
             <div
               key={player.id}
-              className={`flex items-center space-x-3 p-2 m-3 rounded-lg ${player.isActive ? "bg-green-400" : "bg-gray-600"
-                }`}
+              className={`flex items-center space-x-3 p-2 m-3 rounded-lg ${
+                player.isActive ? "bg-green-400" : "bg-gray-600"
+              }`}
             >
               <div className="flex-1">
                 <div className="font-semibold">{player.name}</div>
                 <div>{player.points} pts</div>
               </div>
-              {player.isActive && <div className="text-red-500 font-bold">🎲</div>}
+              {player.isActive && (
+                <div className="text-red-500 font-bold">🎲</div>
+              )}
             </div>
           ))
         )}

@@ -94,7 +94,7 @@ export default function GameBoard({ boardState }: GameBoardProps) {
       setSelectedLetters([]);
     } else {
       setSelectedLetters([]);
-      setWordCheck(`${formedWord}?! ❌ Invalid word`);
+      setWordCheck(`❌${formedWord}❌`);
     }
   };
 
@@ -103,23 +103,24 @@ export default function GameBoard({ boardState }: GameBoardProps) {
       className="w-full max-w-4xl p-6 bg-gray-800 rounded-lg shadow-lg flex flex-col items-center"
       onMouseUp={handleMouseUp}
     >
-      <header className="text-3xl font-bold text-center mb-4 px-6 py-2 bg-gray-700 rounded-lg shadow-md">
+      <header className="text-3xl font-bold text-center mb-4 px-6 py-2 bg-gray-700 rounded-lg shadow-md selectedLetters">
         {selectedLetters.length > 0
           ? selectedLetters.map((x) => x.letter).join("")
-          : "🚀"}
+          : " "}
       </header>
 
       {boardState.length > 0 ? (
-        <div className="grid grid-cols-5 gap-2 bg-gray-700 p-4 rounded-lg">
+        <div className="grid grid-cols-5 gap-1 bg-gray-700 p-4 rounded-lg">
           {boardState.flat().map((letter, index) => (
             <button
               key={index}
               onMouseDown={() => handleMouseDown(letter, index)}
               onMouseEnter={() => handleMouseEnter(letter, index)}
               className={`relative w-12 h-12 m-1 flex items-center justify-center text-xl font-semibold rounded-lg shadow-md transition duration-200 
-                ${selectedLetters.find((x) => x.pos === index)
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-600 hover:bg-gray-500"
+                ${
+                  selectedLetters.find((x) => x.pos === index)
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-600 hover:bg-gray-500"
                 }
               `}
             >
