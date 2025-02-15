@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-
+import { letterPoints } from "../components/utils";
 export default function GameBoard() {
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -8,35 +8,6 @@ export default function GameBoard() {
   const [letterLayout, setLetterLayout] = useState<string[][]>([]);
   const [dictionary, setDictionary] = useState<Set<string>>(new Set());
   const [currentScore, setCurrentScore] = useState<number>(0);
-
-  const letterPoints: { [key: string]: number } = {
-    A: 1,
-    B: 3,
-    C: 3,
-    D: 2,
-    E: 1,
-    F: 4,
-    G: 2,
-    H: 4,
-    I: 1,
-    J: 8,
-    K: 5,
-    L: 1,
-    M: 3,
-    N: 1,
-    O: 1,
-    P: 3,
-    Q: 10,
-    R: 1,
-    S: 1,
-    T: 1,
-    U: 1,
-    V: 4,
-    W: 4,
-    X: 8,
-    Y: 4,
-    Z: 10,
-  };
 
   const generateRandomLayout = () => {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -60,6 +31,7 @@ export default function GameBoard() {
 
   const startNewGame = () => {
     setLetterLayout(generateRandomLayout());
+    setSelectedLetters([]);
   };
 
   const handleMouseDown = (letter: string) => {
@@ -85,7 +57,9 @@ export default function GameBoard() {
       setWordCheck(`${formedWord}: ${wordScore}`);
       console.log("Valid word! Score:", wordScore);
     } else {
-      setWordCheck("Invalid word!");
+      setSelectedLetters([]);
+
+      setWordCheck(`${formedWord}?!`);
       console.log("Invalid word!");
     }
   };
@@ -97,7 +71,7 @@ export default function GameBoard() {
     >
       {/* Header dynamically updating with selected letters */}
       <header className="text-3xl font-bold text-center mb-4 px-6 py-2 bg-gray-700 rounded-lg shadow-md">
-        {selectedLetters.length > 0 ? selectedLetters.join("") : ""}
+        {selectedLetters.length > 0 ? selectedLetters.join("") : "🚀"}
       </header>
 
       {/* 5x5 Grid with buttons */}
@@ -107,7 +81,7 @@ export default function GameBoard() {
           {letterLayout.flat().map((letter, index) => (
             <button
               key={index}
-              className={`relative w-12 h-12 flex items-center justify-center text-xl font-semibold rounded-lg shadow-md transition duration-200 
+              className={`relative w-12 h-12 m-1 flex items-center justify-center text-xl font-semibold rounded-lg shadow-md transition duration-200 
       ${
         selectedLetters.includes(letter)
           ? "bg-blue-500 text-white"

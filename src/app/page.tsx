@@ -8,20 +8,17 @@ export default function Home() {
     <div className="container mx-auto px-4">
       <h1 className="text-3xl font-bold text-center my-6">Word Wave!</h1>
 
-      <div className="grid grid-cols-12 gap-4">
+      <div className="grid grid-cols-12 gap-2">
         {/* Left spacer to center the GameBoard */}
-        <div className="col-span-2"></div>
+        <div className="col-span-1"></div>
 
-        {/* GameBoard component with max width of 6 columns */}
         <div className="col-span-8">
           <GameBoard />
         </div>
 
-        {/* Lobby component with width of 2 columns, automatically positioned right */}
-        <div className="col-span-2">
+        <div className="col-span-3">
           <Lobby />
         </div>
-
       </div>
     </div>
   );
