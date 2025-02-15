@@ -135,7 +135,7 @@ export default function GameBoard({ boardState }: GameBoardProps) {
         <p>Loading... boardState: {JSON.stringify(boardState)}</p>
       )}
 
-      <footer className="text-3xl font-bold text-center px-6 py-2 bg-gray-700 rounded-lg shadow-md mt-4 text-gray-300">
+      <footer className="text-3xl font-bold text-center px-6 py-2 bg-gray-700 rounded-lg shadow-md mt-4 text-gray-300  selectedLetters">
         {wordCheck}
       </footer>
     </div>

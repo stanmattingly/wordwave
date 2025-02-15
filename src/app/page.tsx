@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PowerUps from "./components/PowerUps";
 import GameBoard from "./components/Gameboard";
 import Lobby from "./components/Lobby";
 import { useGameWebSocket } from "./hooks/useGameWebSocket";
@@ -200,14 +201,18 @@ export default function Home() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-2 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+        {/* Left padding */}
+        <div className="col-span-1 md:col-span-1 hidden md:block"></div>
+
         {/* GameBoard with board state */}
-        <div className="md:col-span-8 col-span-1">
+        <div className="col-span-1 md:col-span-8">
           <GameBoard boardState={boardState} />
+          <PowerUps />
         </div>
 
         {/* Lobby with player list and round number */}
-        <div className="md:col-span-3 col-span-1">
+        <div className="col-span-1 md:col-span-3">
           <Lobby roundNumber={roundNumber} players={players} />
         </div>
       </div>
