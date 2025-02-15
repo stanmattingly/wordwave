@@ -1,40 +1,30 @@
-// components/Gameboard.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { letterPoints } from "../components/utils";
+import { useGameWebSocket } from "../hooks/useGameWebSocket";
 
-export default function GameBoard() {
+interface GameBoardProps {
+  boardState: string[][];
+}
+
+export default function GameBoard({ boardState }: GameBoardProps) {
+  const { sendGameMessage, playerId, currentRoom } = useGameWebSocket();
+
   const [selectedLetters, setSelectedLetters] = useState<
     { letter: string; pos: number }[]
   >([]);
   const [isDragging, setIsDragging] = useState(false);
   const [wordCheck, setWordCheck] = useState<string>();
-  const [letterLayout, setLetterLayout] = useState<string[][]>([]);
   const [dictionary, setDictionary] = useState<Set<string>>(new Set());
   const [currentScore, setCurrentScore] = useState<number>(0);
 
-  const generateRandomLayout = () => {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-    let shuffled = [...alphabet].sort(() => Math.random() - 0.5);
-    return Array.from({ length: 5 }, (_, i) =>
-      shuffled.slice(i * 5, i * 5 + 5)
-    );
-  };
-
   useEffect(() => {
-    setLetterLayout(generateRandomLayout());
     fetch("/dictionary/filteredWords.txt")
       .then((response) => response.text())
       .then((text) => {
-        setDictionary(new Set(text.split("\n")));
+        setDictionary(new Set(text.split("\n").map((word) => word.trim())));
       });
   }, []);
-
-  const startNewGame = () => {
-    setLetterLayout(generateRandomLayout());
-    setSelectedLetters([]);
-    setCurrentScore(0);
-  };
 
   const handleMouseDown = (letter: string, index: number) => {
     setSelectedLetters([{ letter, pos: index }]);
@@ -56,15 +46,12 @@ export default function GameBoard() {
       const lastIndex = selectedLetters.length - 1;
       const lastSelected = selectedLetters[lastIndex];
 
-      // If re-entering the letter that is directly before the last one, remove the last letter
       if (
         lastSelected &&
         lastIndex > 0 &&
         selectedLetters[lastIndex - 1].pos === index
       ) {
         setSelectedLetters(selectedLetters.slice(0, lastIndex));
-
-        // Only add the letter if it's adjacent and not already selected
       } else if (lastSelected && isAdjacent(index, lastSelected.pos)) {
         if (!selectedLetters.some((selected) => selected.pos === index)) {
           setSelectedLetters([...selectedLetters, { letter, pos: index }]);
@@ -78,17 +65,36 @@ export default function GameBoard() {
     const formedWord = selectedLetters
       .map((x) => x.letter)
       .join("")
-      .toLowerCase();
+      .toLowerCase()
+      .trim(); // ✅ Ensure no spaces
+
     if (dictionary.has(formedWord)) {
-      let wordScore = 0;
-      for (const { letter } of selectedLetters) {
-        wordScore += letterPoints[letter as keyof typeof letterPoints];
-      }
+      let wordScore = selectedLetters.reduce(
+        (sum, { letter }) => sum + (letterPoints[letter] || 0),
+        0
+      );
+
+      // ✅ Update local score before sending to server
+      const newScore = currentScore + wordScore;
+      setCurrentScore(newScore);
       setWordCheck(`${formedWord}: ${wordScore}`);
-      setCurrentScore((prevScore) => prevScore + wordScore);
+
+      // ✅ Notify the server about the player's score
+      sendGameMessage("player_score_update", {
+        playerId,
+        points: newScore,
+      });
+
+      // ✅ Notify the server to proceed with the next turn
+      sendGameMessage("turn_update", {
+        turnIndex: (currentRoom?.turnIndex ?? 0) + 1,
+      });
+
+      // ✅ Clear selected letters after a successful word
+      setSelectedLetters([]);
     } else {
       setSelectedLetters([]);
-      setWordCheck(`${formedWord}?!`);
+      setWordCheck(`${formedWord}?! ❌ Invalid word`);
     }
   };
 
@@ -102,18 +108,18 @@ export default function GameBoard() {
           ? selectedLetters.map((x) => x.letter).join("")
           : "🚀"}
       </header>
-      {letterLayout.length > 0 ? (
+
+      {boardState.length > 0 ? (
         <div className="grid grid-cols-5 gap-2 bg-gray-700 p-4 rounded-lg">
-          {letterLayout.flat().map((letter, index) => (
+          {boardState.flat().map((letter, index) => (
             <button
               key={index}
               onMouseDown={() => handleMouseDown(letter, index)}
               onMouseEnter={() => handleMouseEnter(letter, index)}
               className={`relative w-12 h-12 m-1 flex items-center justify-center text-xl font-semibold rounded-lg shadow-md transition duration-200 
-                ${
-                  selectedLetters.find((x) => x.pos === index)
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-600 hover:bg-gray-500"
+                ${selectedLetters.find((x) => x.pos === index)
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-600 hover:bg-gray-500"
                 }
               `}
             >
@@ -125,14 +131,9 @@ export default function GameBoard() {
           ))}
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>Loading... boardState: {JSON.stringify(boardState)}</p>
       )}
-      <button
-        onClick={startNewGame}
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition"
-      >
-        New Game
-      </button>
+
       <footer className="text-3xl font-bold text-center px-6 py-2 bg-gray-700 rounded-lg shadow-md mt-4 text-gray-300">
         {wordCheck}
       </footer>
