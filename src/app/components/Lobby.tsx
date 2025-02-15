@@ -7,16 +7,15 @@ interface Player {
   id: number;
   name: string;
   points: number;
-  isActive: boolean; // To determine whose turn it is
+  isActive: boolean;
 }
 
-export default function Lobby() {
-  const [roundNumber, setRoundNumber] = useState(0);
-  const [players, setPlayers] = useState<Player[]>([
-    { id: 1, name: "Alice", points: 5, isActive: true },
-    { id: 2, name: "Bob", points: 8, isActive: false },
-    { id: 3, name: "Charlie", points: 3, isActive: false },
-  ]);
+interface LobbyProps {
+  roundNumber: number;
+  players: Player[];
+}
+
+const Lobby: React.FC<LobbyProps> = ({ roundNumber, players }) => {
   const totalRounds = 5;
 
   // TODO: setPlayers from websocket
@@ -46,4 +45,6 @@ export default function Lobby() {
       </div>
     </div>
   );
-}
+};
+
+export default Lobby;

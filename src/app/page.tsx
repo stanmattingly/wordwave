@@ -5,9 +5,25 @@ import { useState } from "react";
 import GameBoard from "@/app/components/Gameboard";
 import Lobby from "@/app/components/Lobby";
 
+interface Player {
+  id: number;
+  name: string;
+  points: number;
+  isActive: boolean;
+}
+
 export default function Home() {
-  // TODO: Game Controller functions: startGame, nextTurn, nextRound, setPlayerScore
-  // TODO: Pass props to GameBoard and Lobby
+  // TODO: functions: startGame, nextTurn, nextRound
+  // TODO: Pass props to GameBoard
+
+  const totalRounds = 5;
+  const [roundNumber, setRoundNumber] = useState(0);
+
+  const [players, setPlayers] = useState<Player[]>([
+    { id: 1, name: "Alice", points: 5, isActive: true },
+    { id: 2, name: "Bill", points: 8, isActive: false },
+    { id: 3, name: "Stan", points: 0, isActive: false },
+  ]);
 
   const handleIt = () => {
     console.log("yo");
@@ -28,7 +44,7 @@ export default function Home() {
         </div>
 
         <div className="col-span-3">
-          <Lobby />
+          <Lobby roundNumber={roundNumber} players={players} />
         </div>
       </div>
     </div>
