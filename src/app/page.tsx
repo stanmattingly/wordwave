@@ -2,8 +2,8 @@
 "use client";
 
 import { useState } from "react";
-import GameBoard from "@/app/components/Gameboard";
-import Lobby from "@/app/components/Lobby";
+import GameBoard from "./components/Gameboard";
+import Lobby from "./components/Lobby";
 
 interface Player {
   id: number;
