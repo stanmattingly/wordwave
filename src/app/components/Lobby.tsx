@@ -18,12 +18,15 @@ export default function Lobby() {
     ]);
     const totalRounds = 5;
 
+
+    // TODO: setPlayers from websocket
+
     return (
-        <div className="p-4">
-            <div className="text-lg font-bold">Round {roundNumber}/{totalRounds}</div>
-            <div className="flex flex-col mt-4">
+        <div className="w-full bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-2xl font-bold text-center font-bold pt-4">Round {roundNumber}/{totalRounds}</div>
+            <div className="flex flex-col mt-4 ">
                 {players.map(player => (
-                    <div key={player.id} className={`flex items-center space-x-3 p-2 ${player.isActive ? 'bg-green-200' : 'bg-white'}`}>
+                    <div key={player.id} className={`flex items-center space-x-3 p-2 ${player.isActive ? 'bg-green-400' : 'bg-gray-600'}`}>
                         <div className="flex-1">
                             <div className="font-semibold">{player.name}</div>
                             <div>Points: {player.points}</div>

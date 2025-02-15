@@ -13,7 +13,7 @@ export default function Home() {
         <div className="col-span-2"></div>
 
         {/* GameBoard component with max width of 6 columns */}
-        <div className="col-span-6">
+        <div className="col-span-8">
           <GameBoard />
         </div>
 
@@ -22,8 +22,6 @@ export default function Home() {
           <Lobby />
         </div>
 
-        {/* Right spacer to balance the layout */}
-        <div className="col-span-2"></div>
       </div>
     </div>
   );
