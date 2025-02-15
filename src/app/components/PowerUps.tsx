@@ -16,17 +16,17 @@ export default function PowerUps() {
         ))}
       </div>
       <div className="basis-1/6 lm-2 ">
-        <button className="relative w-12 h-12 m-1 flex items-center justify-center text-l font-semibold rounded-lg shadow-md transition duration-200 bg-green-600">
-          Shuf
+        <button className="relative w-16 h-16 m-1 flex items-center justify-center text-l font-semibold rounded-lg shadow-md transition duration-200 bg-blue-500">
+          Shuffle
         </button>
       </div>
       <div className="basis-1/6 lm-2 ">
-        <button className="relative w-12 h-12 m-1 flex items-center justify-center text-l font-semibold rounded-lg shadow-md transition duration-200 bg-green-600">
+        <button className="relative w-16 h-16 m-1 flex items-center justify-center text-l font-semibold rounded-lg shadow-md transition duration-200 bg-blue-500">
           Swap
         </button>
       </div>
       <div className="basis-1/6 lm-2 ">
-        <button className="relative w-12 h-12 m-1 flex items-center justify-center text-l font-semibold rounded-lg shadow-md transition duration-200 bg-green-600">
+        <button className="relative w-16 h-16 m-1 flex items-center justify-center text-l font-semibold rounded-lg shadow-md transition duration-200 bg-blue-500">
           Hint
         </button>
       </div>
