@@ -5,6 +5,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Emerald shades */
+  --emerald-500: #10b981;
+  --emerald-700: #059669;
+  --emerald-900: #064e3b;
+
+  /* Indigo shades */
+  --indigo-500: #6366f1;
+  --indigo-700: #4338ca;
+  --indigo-900: #312e81;
+
+  /* Blue shades */
+  --blue-500: #3b82f6;
+  --blue-700: #1e40af;
+  --blue-900: #1e3a8a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,11 +68,11 @@ body {
 
 .logo-container h2:nth-child(1) {
   color: transparent;
-  -webkit-text-stroke: 2px #253659;
+  -webkit-text-stroke: 2px var(--blue-700);
 }
 
 .logo-container h2:nth-child(2) {
-  color: #04BF9D;
+  color: var(--blue-500);
   animation: animate 4s ease-in-out infinite;
 }
 

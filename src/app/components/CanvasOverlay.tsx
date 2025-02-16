@@ -21,7 +21,7 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.lineWidth = 8;
-        ctx.strokeStyle = "#FFFFFF";
+        ctx.strokeStyle = "#3b82f6";
         for (let i = 1; i < selectedLetters.length; i++) {
           const start = selectedLetters[i - 1];
           const end = selectedLetters[i];

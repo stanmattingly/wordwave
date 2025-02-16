@@ -167,7 +167,7 @@ export default function GameBoard({
                 className={`relative z-10 w-12 h-12 m-1 flex items-center justify-center text-xl font-semibold rounded-lg shadow-md transition duration-200 
                 ${
                   selectedLetters.find((x) => x.pos === index)
-                    ? "bg-blue-500 text-white"
+                    ? "bg-blue-700 text-white"
                     : "bg-gray-600 hover:bg-gray-500"
                 }
               `}
