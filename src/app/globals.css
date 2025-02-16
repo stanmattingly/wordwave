@@ -89,3 +89,52 @@ body {
         0% 100%);
   }
 }
+
+
+
+/* Word Scored Stuff */
+
+/* WordScored.css */
+.word-scored-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Semi-transparent background */
+  animation: fadeIn 0.5s;
+}
+
+.word-scored-popup {
+  text-align: center;
+  padding: 20px;
+  max-width: 400px;
+  min-width: 200px;
+  background: linear-gradient(145deg, #6e48aa, #9d50bb);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: scaleIn 0.5s;
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.5);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}

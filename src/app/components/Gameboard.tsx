@@ -2,15 +2,20 @@
 
 import { useState, useEffect, useRef, CSSProperties } from "react";
 import { letterPoints } from "../components/utils";
-import CanvasOverlay from "../components/CanvasOverlay"; // Adjust the path as necessary
+import CanvasOverlay from "../components/CanvasOverlay";
+import WordScored from "../components/WordScored";
 
 import { useGameWebSocket } from "../hooks/useGameWebSocket";
 
 interface GameBoardProps {
   boardState: string[][];
+  setBoardState: (newState: string[][]) => void;
 }
 
-export default function GameBoard({ boardState }: GameBoardProps) {
+export default function GameBoard({
+  boardState,
+  setBoardState,
+}: GameBoardProps) {
   const { sendGameMessage, playerId, currentRoom } = useGameWebSocket();
 
   const [selectedLetters, setSelectedLetters] = useState<
@@ -20,6 +25,9 @@ export default function GameBoard({ boardState }: GameBoardProps) {
   const [wordCheck, setWordCheck] = useState<string>();
   const [dictionary, setDictionary] = useState<Set<string>>(new Set());
   const [currentScore, setCurrentScore] = useState<number>(0);
+  const [showWordScore, setShowWordScore] = useState(false);
+  const [formedWord, setFormedWord] = useState<string>("");
+  const [wordScore, setWordScore] = useState<number>(0);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -32,6 +40,20 @@ export default function GameBoard({ boardState }: GameBoardProps) {
       x: col * tileSize + tileSize / 2 + offset, // Centering
       y: row * tileSize + tileSize / 2 + offset, // Centering
     };
+  };
+
+  const updateBoardWithNewLetters = () => {
+    const newBoardState = [...boardState]; // Clone the board state
+    selectedLetters.forEach(({ pos }) => {
+      const row = Math.floor(pos / 5);
+      const col = pos % 5;
+      newBoardState[row][col] = generateRandomLetter(); // Replace with new random letter
+    });
+    setBoardState(newBoardState); // Update board state
+  };
+
+  const generateRandomLetter = () => {
+    return String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random letter A-Z
   };
 
   useEffect(() => {
@@ -75,42 +97,44 @@ export default function GameBoard({ boardState }: GameBoardProps) {
       }
     }
   };
-
   const handleMouseUp = () => {
     setIsDragging(false);
-    const formedWord = selectedLetters
+    const word = selectedLetters
       .map((x) => x.letter)
       .join("")
       .toLowerCase()
-      .trim(); // ✅ Ensure no spaces
+      .trim();
 
-    if (dictionary.has(formedWord)) {
-      let wordScore = selectedLetters.reduce(
+    if (dictionary.has(word)) {
+      let score = selectedLetters.reduce(
         (sum, { letter }) => sum + (letterPoints[letter] || 0),
         0
       );
 
-      // ✅ Update local score before sending to server
-      const newScore = currentScore + wordScore;
-      setCurrentScore(newScore);
-      setWordCheck(`${formedWord}: ${wordScore}`);
+      setFormedWord(word); // Set the formed word
+      setWordScore(score); // Set the score
 
-      // ✅ Notify the server about the player's score
+      setShowWordScore(true);
+      setTimeout(() => setShowWordScore(false), 3000);
+
+      const newScore = currentScore + score;
+      setCurrentScore(newScore);
+      setWordCheck(`${word}: ${score}`);
+
       sendGameMessage("player_score_update", {
         playerId,
         points: newScore,
       });
 
-      // ✅ Notify the server to proceed with the next turn
       sendGameMessage("turn_update", {
         turnIndex: (currentRoom?.turnIndex ?? 0) + 1,
       });
 
-      // ✅ Clear selected letters after a successful word
+      updateBoardWithNewLetters(); // Call to replace letters
       setSelectedLetters([]);
     } else {
       setSelectedLetters([]);
-      setWordCheck(`❌${formedWord}❌`);
+      setWordCheck(`❌${word}❌`);
     }
   };
 
@@ -124,6 +148,9 @@ export default function GameBoard({ boardState }: GameBoardProps) {
           ? selectedLetters.map((x) => x.letter).join("")
           : " "}
       </header>
+
+      {showWordScore && <WordScored word={formedWord} score={wordScore} />}
+
       <div className="relative">
         <CanvasOverlay
           selectedLetters={selectedLetters}

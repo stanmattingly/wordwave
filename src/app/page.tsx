@@ -189,7 +189,7 @@ export default function Home() {
 
         {/* GameBoard with board state */}
         <div className="col-span-1 md:col-span-8">
-          <GameBoard boardState={boardState} />
+          <GameBoard boardState={boardState} setBoardState={setBoardState} />
           <PowerUps />
         </div>
 
