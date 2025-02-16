@@ -1,8 +1,11 @@
+// page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import PowerUps from "./components/PowerUps";
 import GameBoard from "./components/Gameboard";
+import HostControls from "./components/HostControls";
+
 import Lobby from "./components/Lobby";
 import { Logo } from "./components/utils";
 import { useGameWebSocket } from "./hooks/useGameWebSocket";
@@ -173,31 +176,12 @@ export default function Home() {
     <div className="container mx-auto px-4">
       <Logo />
 
-      {isHost && (
-        <div className="text-center">
-          <button
-            onClick={startGame}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            disabled={players.length === 0}
-          >
-            Start Game
-          </button>
-          <button
-            onClick={nextTurn}
-            className="bg-green-500 text-white px-4 py-2 rounded ml-2"
-            disabled={players.length === 0}
-          >
-            Next Turn
-          </button>
-          <button
-            onClick={nextRound}
-            className="bg-red-500 text-white px-4 py-2 rounded ml-2"
-            disabled={players.length === 0}
-          >
-            Next Round
-          </button>
-        </div>
-      )}
+      <HostControls
+        isHost={isHost}
+        startGame={startGame}
+        nextTurn={nextTurn}
+        nextRound={nextRound}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
         {/* Left padding */}
